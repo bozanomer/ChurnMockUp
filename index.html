@@ -409,8 +409,11 @@
     });
     sessionStorage.setItem('churnDetayList', JSON.stringify(filtered));
     sessionStorage.setItem('churnDetayLabel', label);
-    window.open('detay.html', '_blank');
-  };
+window.open(
+    'detay.html',
+    '_blank',
+    'width=1280,height=800,left=100,top=50,resizable=yes,scrollbars=yes'
+);
 
   update();
 })();
