@@ -68,6 +68,8 @@
     <table id="tbl">
       <thead>
         <tr>
+          <th>No</th>
+
           <th>Kullanıcı ID</th>
           <th>Ad Soyad</th>
           <th>E-posta</th>
@@ -104,16 +106,33 @@
   }
 
   var tbody = document.getElementById('tbody');
-  list.forEach(function(row){
-    var tr = document.createElement('tr');
-    [row.id, row.ad, row.email, row.telefon, row.girisTarihi, row.sonIslemTarihi, row.segment, row.sube, row.durum,
-     row.clv.toLocaleString('tr-TR') + ' ₺', row.gun + ' gün'].forEach(function(val){
-      var td = document.createElement('td');
-      td.textContent = val;
-      tr.appendChild(td);
-    });
-    tbody.appendChild(tr);
+  list.forEach(function(row, index){
+  var tr = document.createElement('tr');
+
+  var tdNo = document.createElement('td');
+  tdNo.textContent = index + 1;
+  tr.appendChild(tdNo);
+
+  [
+    row.id,
+    row.ad,
+    row.email,
+    row.telefon,
+    row.girisTarihi,
+    row.sonIslemTarihi,
+    row.segment,
+    row.sube,
+    row.durum,
+    row.clv.toLocaleString('tr-TR') + ' ₺',
+    row.gun + ' gün'
+  ].forEach(function(val){
+    var td = document.createElement('td');
+    td.textContent = val;
+    tr.appendChild(td);
   });
+
+  tbody.appendChild(tr);
+});
 })();
 </script>
 </body>
