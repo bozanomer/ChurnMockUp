@@ -31,6 +31,33 @@
     overflow: hidden;
   }
 
+  /* Logoyu sağ üst köşeye sabitleyen ve diğer katmanların üstüne çıkaran stil */
+  .header-row {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2px;
+    flex-shrink: 0;
+  }
+
+  .logo {
+    height: 32px; /* Logonun ekranda taşmasını önleyecek ideal yükseklik */
+    width: auto;  /* Orantılı genişlik */
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Mobil cihazlarda logonun başlığı sıkıştırmaması için ufak bir esneklik */
+  @media (max-width: 768px) {
+    .header-row {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  }
+
   body{
     background:var(--page-bg);
     color:var(--text-primary);
@@ -51,25 +78,12 @@
     justify-content: space-between;
   }
 
-  .header-row{
-    position:relative;
-    margin-bottom: 2px;
-    flex-shrink: 0;
-  }
-
-  .logo{
-    position:absolute;
-    top:0;
-    right:0;
-    height:28px;
-    width:auto;
-  }
-
   h1{
     font-size:18px;
     font-weight:700;
     margin:0;
     text-align:center;
+    flex: 1;
   }
 
   /* Slider alanları dikey alanı daraltmak için küçültüldü */
@@ -170,8 +184,9 @@
 <div class="wrap">
 
   <div class="header-row">
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAasCA_BANNED_BASE64_FOR_BREVITY" alt="dataSpecta" class="logo" />
+    <div style="width: 120px; display: @media (max-width: 768px) {none};"></div> <!-- Dengeli yerleşim için boşluk -->
     <h1>Kayıp Risk Haritası</h1>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAasCA_BANNED_BASE64_FOR_BREVITY" alt="dataSpecta" class="logo" />
   </div>
 
   <div class="filter-row">  
@@ -239,20 +254,36 @@
     </div>
   </div>
 
-  <!-- Grafik buradaki esnek kapsayıcı içinde dikey alana göre kendini boyutlandırıyor -->
+  <!-- Grafik Alanı: Başlıklar güvenli koordinatlara taşındı ve z-index hiyerarşisi düzeltildi -->
   <div class="chart-container">
     <svg id="plot" viewBox="0 0 700 430" style="overflow:visible;">
-      <text x="215" y="35" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-warning)">Değerli ama aktif</text>
-      <text x="525" y="35" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-danger)">Kritik kayıp riski</text>
+      <!-- Kılavuz Çizgileri -->
       <line x1="60" y1="20" x2="60" y2="360" stroke="var(--border-strong)" stroke-width="1"/>
       <line x1="60" y1="360" x2="680" y2="360" stroke="var(--border-strong)" stroke-width="1"/>
       <line id="vLine" x1="60" y1="20" x2="60" y2="360" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
       <line id="hLine" x1="60" y1="360" x2="680" y2="360" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
-      <text x="215" y="382" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-success)">Sağlıklı müşteri</text>
-      <text x="525" y="382" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)">Doğal kayıp</text>
+      
+      <!-- Grafik Veri Noktaları (Buraya üretilecek) -->
+      <g id="points"></g>
+
+      <!-- Çeyrek Başlıkları (Noktaların her zaman üstünde kalması için alta eklendi ve konumları dışa kaydırıldı) -->
+      <!-- Üst Başlıklar (y koordinatları 35'ten 15'e çekilerek grafik dışına taşındı) -->
+      <rect x="130" y="2" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
+      <text x="215" y="16" text-anchor="middle" font-size="12" font-weight="800" fill="var(--text-warning)">Değerli ama aktif</text>
+      
+      <rect x="440" y="2" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
+      <text x="525" y="16" text-anchor="middle" font-size="12" font-weight="800" fill="var(--text-danger)">Kritik kayıp riski</text>
+      
+      <!-- Alt Başlıklar (Grafik çizgisinin güvenle altına alındı) -->
+      <rect x="130" y="365" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
+      <text x="215" y="380" text-anchor="middle" font-size="12" font-weight="800" fill="var(--text-success)">Sağlıklı müşteri</text>
+      
+      <rect x="440" y="365" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
+      <text x="525" y="380" text-anchor="middle" font-size="12" font-weight="800" fill="var(--text-secondary)">Doğal kayıp</text>
+      
+      <!-- Eksen Etiketleri -->
       <text x="370" y="415" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)">Son etkileşimden bu yana geçen gün</text>
       <text x="20" y="190" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)" transform="rotate(-90 20 190)">Yaşam boyu değer (₺)</text>
-      <g id="points"></g>
     </svg>
   </div>
 
@@ -261,7 +292,6 @@
 </div>
 
 <script>
-/* Mevcut JS mantığın tamamen korunmuştur. Sadece Logo Base64'ünü kendi kodundakiyle değiştirmen yeterli. */
 (function(){
   var W = 700, H = 420, padL = 60, padB = 60, padT = 20, padR = 20;
   var xMax = 365, yMax = 750000;
