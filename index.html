@@ -429,13 +429,30 @@
         clv: Math.round(p.clv), gun: Math.round(p.day)
       };
     });
-    var payload = encodeURIComponent(JSON.stringify(filtered));
-    var labelParam = encodeURIComponent(label);
+
+    var json = JSON.stringify(filtered);
+    var storageOk = false;
     try {
-      sessionStorage.setItem('churnDetayList', JSON.stringify(filtered));
+      sessionStorage.setItem('churnDetayList', json);
       sessionStorage.setItem('churnDetayLabel', label);
-    } catch(e) { /* bazı ortamlarda sessionStorage engellenebilir, sorun değil */ }
-    window.open('detay.html?label=' + labelParam + '&data=' + payload, '_blank');
+      storageOk = true;
+    } catch(e) { /* bazı ortamlarda sessionStorage engellenebilir */ }
+
+    var payload = encodeURIComponent(json);
+    var labelParam = encodeURIComponent(label);
+    var url = 'detay.html';
+
+    // URL'yi sadece güvenli uzunlukta ise (küçük listeler) kullan; büyük listelerde
+    // "URI Too Long" hatasını önlemek için tamamen sessionStorage'a güveniyoruz.
+    var SAFE_URL_LENGTH = 4000;
+    if (payload.length < SAFE_URL_LENGTH) {
+      url += '?label=' + labelParam + '&data=' + payload;
+    } else if (!storageOk) {
+      // sessionStorage da yoksa elimizde başka seçenek kalmadı, yine de deneyelim
+      url += '?label=' + labelParam + '&data=' + payload;
+    }
+
+    window.open(url, '_blank');
   };
 
   update();
