@@ -345,7 +345,7 @@
 <script>
 (function(){
   var W = 700, H = 420, padL = 60, padB = 60, padT = 20, padR = 20;
-  var xMax = 365, yMax = 750000;
+  var xMax = 180, yMax = 1000000;
   var plotW = W - padL - padR, plotH = H - padT - padB;
 
   function xPix(v){ return padL + (v/xMax)*plotW; }
@@ -377,8 +377,8 @@
   var points = [];
   var n = 260;
   for (var i=0;i<n;i++){
-    var day = Math.pow(Math.random(),1.15)*xMax;
-    var base = 4000 + Math.random()*(yMax*0.85);
+    var day = Math.pow(Math.random(), 1.8) * xMax;
+    var base = Math.pow(Math.random(), 2.2) * yMax;
     var clv = Math.min(yMax, base * (0.6 + Math.random()*0.6));
     var size = 3 + Math.random()*5;
 
@@ -388,8 +388,10 @@
     var fn = pick(firstNames), ln = pick(lastNames);
     var joinDate = new Date(today.getTime() - Math.floor(Math.random()*6*365)*86400000);
     var lastActionDate = new Date(today.getTime() - Math.floor(day)*86400000);
-    var segment = clv >= 400000 ? 'VIP' : (clv >= 120000 ? 'Standart' : 'Başlangıç');
-    var status = pick(statusPool);
+    var segment =
+  clv >= 500000 ? 'VIP'
+  : clv >= 250000 ? 'Premium'
+  : 'Standart';    var status = pick(statusPool);
 
     points.push({
       day:day, clv:clv, r:size, prevDay:prevDay, prevClv:prevClv,
