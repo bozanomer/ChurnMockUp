@@ -6,19 +6,13 @@
 <title>Müşteri Listesi</title>
 <style>
   :root{
-    --text-primary:
-#16181C;
-    --text-secondary:
-#6B6B6B;
-    --text-muted:
-#9A9A9A;
-    --border-strong:
-#D8D4C8;
-    --surface-1:
-#F8F7F3;
-    --page-bg:
-#FFFFFF;
-    --radius:10px;
+    --text-primary: #16181C;
+    --text-secondary: #6B6B6B;
+    --text-muted: #9A9A9A;
+    --border-strong: #D8D4C8;
+    --surface-1: #F8F7F3;
+    --page-bg: #FFFFFF;
+    --radius: 10px;
   }
   *{ box-sizing:border-box; }
   body{
@@ -40,6 +34,7 @@
     border:1px solid var(--border-strong);
     border-radius:6px;
     padding:4px 10px;
+    cursor: pointer;
   }
   .back:hover{ background:var(--surface-1); }
   table{
@@ -62,12 +57,18 @@
   }
   tr:nth-child(even) td{ background:var(--surface-1); }
   .empty{ color:var(--text-muted); font-size:14px; padding:2rem 0; }
-  .table-scroll{ overflow-x:auto; }
+  .table-scroll{ 
+    overflow-x:auto; 
+    -webkit-overflow-scrolling: touch; /* Mobil akıcılığı için */
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <a href="javascript:window.close();" class="back">← Kapat</a>
+  <button onclick="handleClose()" class="back">← Kapat / Geri Dön</button>
   <h1 id="title">Müşteri Listesi</h1>
   <p class="meta" id="meta"></p>
   <div class="table-scroll">
@@ -93,44 +94,82 @@
   </div>
   <p class="empty" id="emptyMsg" style="display:none;">Görüntülenecek veri bulunamadı. Lütfen ana sayfadan tekrar deneyin.</p>
 </div>
+
 <script>
+// Pencereyi kapatma veya geçmişe yönlendirme güvenli fonksiyonu
+function handleClose() {
+  if (window.opener || window.history.length > 1) {
+    if (window.opener) {
+      window.close();
+    } else {
+      window.history.back();
+    }
+  } else {
+    alert("Kapatılacak üst pencere bulunamadı. Lütfen sekmeyi manuel olarak kapatın.");
+  }
+}
+
 (function(){
   var raw = sessionStorage.getItem('churnDetayList');
   var label = sessionStorage.getItem('churnDetayLabel') || 'Müşteri Listesi';
   var list = [];
-  try { list = JSON.parse(raw) || []; } catch(e) { list = []; }
+  
+  try { 
+    list = JSON.parse(raw) || []; 
+  } catch(e) { 
+    list = []; 
+  }
+  
   document.getElementById('title').textContent = label;
   document.getElementById('meta').textContent = list.length + ' müşteri · dataSpecta BI mockup taslağı, örnek veridir';
+  
   if (!list.length){
     document.getElementById('tbl').style.display = 'none';
     document.getElementById('emptyMsg').style.display = 'block';
     return;
   }
+  
   var tbody = document.getElementById('tbody');
+  
   list.forEach(function(row, index){
-  var tr = document.createElement('tr');
-  var tdNo = document.createElement('td');
-  tdNo.textContent = index + 1;
-  tr.appendChild(tdNo);
-  [
-    row.id,
-    row.ad,
-    row.email,
-    row.telefon,
-    row.girisTarihi,
-    row.sonIslemTarihi,
-    row.segment,
-    row.sube,
-    row.durum,
-    row.clv.toLocaleString('tr-TR') + ' ₺',
-    row.gun + ' gün'
-  ].forEach(function(val){
-    var td = document.createElement('td');
-    td.textContent = val;
-    tr.appendChild(td);
+    var tr = document.createElement('tr');
+    
+    // Sıra numarası
+    var tdNo = document.createElement('td');
+    tdNo.textContent = index + 1;
+    tr.appendChild(tdNo);
+    
+    // Güvenli veri okuma (Null/Undefined kontrolü)
+    var clvFormatted = (row.clv !== undefined && row.clv !== null) 
+      ? Number(row.clv).toLocaleString('tr-TR') + ' ₺' 
+      : '-';
+      
+    var gunFormatted = (row.gun !== undefined && row.gun !== null) 
+      ? row.gun + ' gün' 
+      : '-';
+
+    var dataCells = [
+      row.id || '-',
+      row.ad || '-',
+      row.email || '-',
+      row.telefon || '-',
+      row.girisTarihi || '-',
+      row.sonIslemTarihi || '-',
+      row.segment || '-',
+      row.sube || '-',
+      row.durum || '-',
+      clvFormatted,
+      gunFormatted
+    ];
+    
+    dataCells.forEach(function(val){
+      var td = document.createElement('td');
+      td.textContent = val;
+      tr.appendChild(td);
+    });
+    
+    tbody.appendChild(tr);
   });
-  tbody.appendChild(tr);
-});
 })();
 </script>
 </body>
