@@ -28,76 +28,92 @@
     background:var(--page-bg);
     color:var(--text-primary);
     font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding:2rem;
+    padding:1.5rem;
   }
 
   .wrap{
-    max-width:900px;
+    max-width:1200px;
     margin:0 auto;
   }
 
   .header-row{
     position:relative;
-    margin-bottom:4px;
+    margin-bottom:12px;
   }
 
   .logo{
     position:absolute;
     top:0;
     right:0;
-    height:32px;
+    height:30px;
     width:auto;
   }
 
   h1{
-    font-size:20px;
+    font-size:19px;
     font-weight:700;
-    margin:0 0 4px;
+    margin:0;
     text-align:center;
   }
 
-  .subtitle{
-    font-size:13px;
-    color:var(--text-secondary);
-    margin:0 0 1.5rem;
-    max-width:640px;
-    line-height:1.5;
+  .controls-row{
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+    margin-bottom:1rem;
+  }
+
+  .kpi-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:1rem;
   }
 
   .kpi-card{
     position:relative;
+    flex:1 1 220px;
     border-radius:var(--radius);
-    padding:1rem;
-    padding-right:2.6rem;
+    padding:0.75rem 0.9rem;
+    padding-right:2.4rem;
+  }
+
+  .kpi-title{
+    font-size:12.5px;
+    font-weight:700;
+    margin:0 0 2px;
+  }
+
+  .kpi-count{
+    font-size:22px;
+    font-weight:500;
+    margin:0;
   }
 
   .kpi-amount{
-    font-size:13px;
-    margin:4px 0 0;
+    font-size:12.5px;
+    margin:2px 0 0;
   }
 
   .kpi-trend{
-    font-size:12px;
-    margin:6px 0 0;
-    display:flex;
-    align-items:center;
-    gap:4px;
+    font-size:11.5px;
+    margin:4px 0 0;
   }
 
   .kpi-action{
-    font-size:12px;
+    font-size:11.5px;
     font-weight:700;
-    margin:8px 0 0;
-    padding-top:8px;
+    margin:6px 0 0;
+    padding-top:6px;
     border-top:1px solid rgba(0,0,0,0.08);
   }
 
   .detail-btn{
     position:absolute;
-    top:10px;
-    right:10px;
-    width:24px;
-    height:24px;
+    top:8px;
+    right:8px;
+    width:22px;
+    height:22px;
     border-radius:6px;
     border:none;
     background:rgba(255,255,255,0.6);
@@ -111,8 +127,14 @@
     background:rgba(255,255,255,0.95);
   }
   .detail-btn svg{
-    width:14px;
-    height:14px;
+    width:13px;
+    height:13px;
+  }
+
+  .footer-note{
+    font-size:11px;
+    color:var(--text-muted);
+    margin-top:1rem;
   }
 </style>
 </head>
@@ -124,8 +146,8 @@
     <h1>Kayıp Risk Haritası</h1>
   </div>
 
-<div style="display:flex; gap:24px; flex-wrap:wrap; margin-top:32px; margin-bottom:1.25rem;"> 
-  <div style="flex:1; min-width:220px;">
+  <div class="controls-row">
+    <div style="flex:1; min-width:220px;">
       <label style="font-size:13px; color:var(--text-secondary); display:flex; justify-content:space-between; align-items:center;">
         <span>Son etkileşimden bu yana geçen gün eşiği</span>
         <span style="display:flex; align-items:center; gap:6px;">
@@ -149,13 +171,13 @@
     </div>
   </div>
 
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:1.5rem;">
+  <div class="kpi-row">
     <div class="kpi-card" style="background:var(--bg-danger);">
       <button class="detail-btn" onclick="openDetail('crit','Kritik kayıp riski')" title="Müşteri listesini gör">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </button>
-      <p style="font-size:13px; font-weight:700; margin:0 0 4px; color:var(--text-danger);">Kritik kayıp riski</p>
-      <p style="font-size:24px; font-weight:500; margin:0; color:var(--text-danger);" id="critCount">-</p>
+      <p class="kpi-title" style="color:var(--text-danger);">Kritik kayıp riski</p>
+      <p class="kpi-count" style="color:var(--text-danger);" id="critCount">-</p>
       <p class="kpi-amount" style="color:var(--text-danger);" id="critShare">-</p>
       <p class="kpi-trend" style="color:var(--text-danger);" id="critTrend">-</p>
       <p class="kpi-action" style="color:var(--text-danger);" id="critAction">-</p>
@@ -164,8 +186,8 @@
       <button class="detail-btn" onclick="openDetail('watch','Değerli ama aktif')" title="Müşteri listesini gör">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </button>
-      <p style="font-size:13px; font-weight:700; margin:0 0 4px; color:var(--text-warning);">Değerli ama aktif</p>
-      <p style="font-size:24px; font-weight:500; margin:0; color:var(--text-warning);" id="watchCount">-</p>
+      <p class="kpi-title" style="color:var(--text-warning);">Değerli ama aktif</p>
+      <p class="kpi-count" style="color:var(--text-warning);" id="watchCount">-</p>
       <p class="kpi-amount" style="color:var(--text-warning);" id="watchShare">-</p>
       <p class="kpi-trend" style="color:var(--text-warning);" id="watchTrend">-</p>
     </div>
@@ -173,8 +195,8 @@
       <button class="detail-btn" onclick="openDetail('dormant','Doğal kayıp')" title="Müşteri listesini gör">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </button>
-      <p style="font-size:13px; font-weight:700; margin:0 0 4px; color:var(--text-secondary);">Doğal kayıp</p>
-      <p style="font-size:24px; font-weight:500; margin:0;" id="dormantCount">-</p>
+      <p class="kpi-title" style="color:var(--text-secondary);">Doğal kayıp</p>
+      <p class="kpi-count" id="dormantCount">-</p>
       <p class="kpi-amount" style="color:var(--text-secondary);" id="dormantShare">-</p>
       <p class="kpi-trend" style="color:var(--text-secondary);" id="dormantTrend">-</p>
     </div>
@@ -182,38 +204,38 @@
       <button class="detail-btn" onclick="openDetail('healthy','Sağlıklı müşteri')" title="Müşteri listesini gör">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </button>
-      <p style="font-size:13px; font-weight:700; margin:0 0 4px; color:var(--text-success);">Sağlıklı müşteri</p>
-      <p style="font-size:24px; font-weight:500; margin:0; color:var(--text-success);" id="healthyCount">-</p>
+      <p class="kpi-title" style="color:var(--text-success);">Sağlıklı müşteri</p>
+      <p class="kpi-count" style="color:var(--text-success);" id="healthyCount">-</p>
       <p class="kpi-amount" style="color:var(--text-success);" id="healthyShare">-</p>
       <p class="kpi-trend" style="color:var(--text-success);" id="healthyTrend">-</p>
     </div>
   </div>
 
   <div style="position:relative; width:100%;">
-    <svg id="plot" viewBox="0 0 700 430" width="100%" style="display:block; overflow:visible;">
-      <text x="215" y="35" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-warning)">Değerli ama aktif</text>
-      <text x="525" y="35" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-danger)">Kritik kayıp riski</text>
-      <line x1="60" y1="20" x2="60" y2="360" stroke="var(--border-strong)" stroke-width="1"/>
-      <line x1="60" y1="360" x2="680" y2="360" stroke="var(--border-strong)" stroke-width="1"/>
-      <line id="vLine" x1="60" y1="20" x2="60" y2="360" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
-      <line id="hLine" x1="60" y1="360" x2="680" y2="360" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
-      <text x="215" y="382" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-success)">Sağlıklı müşteri</text>
-      <text x="525" y="382" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)">Doğal kayıp</text>
-      <text x="370" y="415" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)">Son etkileşimden bu yana geçen gün</text>
-      <text x="20" y="190" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)" transform="rotate(-90 20 190)">Yaşam boyu değer (₺)</text>
+    <svg id="plot" viewBox="0 0 1000 360" width="100%" style="display:block; overflow:visible;">
+      <text x="295" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-warning)">Değerli ama aktif</text>
+      <text x="745" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-danger)">Kritik kayıp riski</text>
+      <line x1="70" y1="20" x2="70" y2="290" stroke="var(--border-strong)" stroke-width="1"/>
+      <line x1="70" y1="290" x2="970" y2="290" stroke="var(--border-strong)" stroke-width="1"/>
+      <line id="vLine" x1="70" y1="20" x2="70" y2="290" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <line id="hLine" x1="70" y1="290" x2="970" y2="290" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="295" y="312" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-success)">Sağlıklı müşteri</text>
+      <text x="745" y="312" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)">Doğal kayıp</text>
+      <text x="520" y="345" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)">Son etkileşimden bu yana geçen gün</text>
+      <text x="22" y="155" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)" transform="rotate(-90 22 155)">Yaşam boyu değer (₺)</text>
       <g id="points"></g>
     </svg>
   </div>
 
-  <p style="font-size:11px; color:var(--text-muted); margin-top:1.5rem;">dataSpecta BI · Mockup taslağı — örnek veri ile üretilmiştir</p>
+  <p class="footer-note">dataSpecta BI · Mockup taslağı — örnek veri ile üretilmiştir</p>
 
 </div>
 
 <script>
 (function(){
-  var W = 700, H = 420, padL = 60, padB = 60, padT = 20, padR = 20;
+  var W = 1000, H = 360, padL = 70, padB = 70, padT = 20, padR = 30;
   var xMax = 365, yMax = 750000;
-  var plotW = W - padL - padR, plotH = H - padT - padB;
+  var plotW = W - padL - padR, plotH = (H - padB) - padT;
 
   function xPix(v){ return padL + (v/xMax)*plotW; }
   function yPix(v){ return (H - padB) - (v/yMax)*plotH; }
@@ -239,6 +261,8 @@
     return d.toLocaleDateString('tr-TR', {year:'numeric', month:'2-digit', day:'2-digit'});
   }
 
+  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
   var today = new Date();
   var statusPool = ['Atanmadı','Atanmadı','Aranıyor','Teklif Sunuldu','Kapatıldı'];
 
@@ -250,7 +274,6 @@
     var clv = Math.min(yMax, base * (0.6 + Math.random()*0.6));
     var size = 3 + Math.random()*5;
 
-    // geçen dönem (yaklaşık 30 gün önceki) durum simülasyonu
     var prevDay = clamp(day - (20 + Math.random()*20), 0, xMax);
     var prevClv = clv * (0.88 + Math.random()*0.14);
 
@@ -301,8 +324,6 @@
 
   var dayT = parseInt(daySlider.value, 10);
   var clvT = parseInt(clvSlider.value, 10);
-
-  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
   function formatCurrencyShort(v){
     if (v >= 1000000) return (v/1000000).toFixed(2).replace('.', ',') + ' M ₺';
@@ -408,9 +429,13 @@
         clv: Math.round(p.clv), gun: Math.round(p.day)
       };
     });
-    sessionStorage.setItem('churnDetayList', JSON.stringify(filtered));
-    sessionStorage.setItem('churnDetayLabel', label);
-    window.open('detay.html', '_blank');
+    var payload = encodeURIComponent(JSON.stringify(filtered));
+    var labelParam = encodeURIComponent(label);
+    try {
+      sessionStorage.setItem('churnDetayList', JSON.stringify(filtered));
+      sessionStorage.setItem('churnDetayLabel', label);
+    } catch(e) { /* bazı ortamlarda sessionStorage engellenebilir, sorun değil */ }
+    window.open('detay.html?label=' + labelParam + '&data=' + payload, '_blank');
   };
 
   update();
