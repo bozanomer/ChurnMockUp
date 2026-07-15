@@ -193,23 +193,23 @@
       <label style="font-size:12px; color:var(--text-secondary); display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
         <span>Son etkileşimden bu yana geçen gün eşiği</span>
         <span style="display:flex; align-items:center; gap:4px;">
-          <input type="number" id="dayInput" value="180" min="0" max="365" step="5"
+          <input type="number" id="dayInput" value="90" min="0" max="180" step="5"
             style="width:54px; font-weight:700; text-align:right; border:1px solid var(--border-strong); border-radius:6px; padding:2px 4px; font-size:11px; color:var(--text-primary); font-family:inherit;" />
           <span style="font-weight:700; color:var(--text-primary);">gün</span>
         </span>
       </label>
-      <input type="range" id="daySlider" min="0" max="365" step="5" value="180" style="width:100%; margin: 0;" />
+      <input type="range" id="daySlider" min="0" max="180" step="5" value="90" style="width:100%; margin: 0;" />
     </div>
     <div style="flex:1; min-width:200px;">
       <label style="font-size:12px; color:var(--text-secondary); display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
         <span>Yaşam boyu değer (CLV) eşiği</span>
         <span style="display:flex; align-items:center; gap:4px;">
-          <input type="number" id="clvInput" value="350000" min="0" max="750000" step="10000"
+          <input type="number" id="clvInput" value="250000" min="0" max="1000000" step="10000"
             style="width:80px; font-weight:700; text-align:right; border:1px solid var(--border-strong); border-radius:6px; padding:2px 4px; font-size:11px; color:var(--text-primary); font-family:inherit;" />
           <span style="font-weight:700; color:var(--text-primary);">₺</span>
         </span>
       </label>
-      <input type="range" id="clvSlider" min="0" max="750000" step="10000" value="350000" style="width:100%; margin: 0;" />
+      <input type="range" id="clvSlider" min="0" max="1000000" step="10000" value="250000" style="width:100%; margin: 0;" />
     </div>
   </div>
 
