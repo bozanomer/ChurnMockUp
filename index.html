@@ -461,8 +461,8 @@
     var totalClv = 0;
 
     function categorize(day, clv){
-      var highDay = day >= dayT;
-      var highClv = clv >= clvT;
+      var highDay = day > dayT;
+      var highClv = clv > clvT;
       if (highDay && highClv) return 'crit';
       if (!highDay && highClv) return 'watch';
       if (highDay && !highClv) return 'dormant';
