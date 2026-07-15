@@ -252,39 +252,78 @@
       <p class="kpi-trend" style="color:var(--text-success);" id="healthyTrend">-</p>
     </div>
   </div>
+<!-- Grafik Alanı -->
+<div class="chart-container">
+  <svg id="plot" viewBox="0 0 700 430" style="overflow:visible;">
 
-  <!-- Grafik Alanı: Başlıklar güvenli koordinatlara taşındı ve z-index hiyerarşisi düzeltildi -->
-  <div class="chart-container">
-    <svg id="plot" viewBox="0 0 700 430" style="overflow:visible;">
-      <!-- Kılavuz Çizgileri -->
-      <line x1="60" y1="20" x2="60" y2="360" stroke="var(--border-strong)" stroke-width="1"/>
-      <line x1="60" y1="360" x2="680" y2="360" stroke="var(--border-strong)" stroke-width="1"/>
-      <line id="vLine" x1="60" y1="20" x2="60" y2="360" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
-      <line id="hLine" x1="60" y1="360" x2="680" y2="360" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
-      
-      <!-- Grafik Veri Noktaları (Buraya üretilecek) -->
-      <g id="points"></g>
+    <!-- Kılavuz Çizgileri -->
+    <line x1="60" y1="20" x2="60" y2="360" stroke="var(--border-strong)" stroke-width="1"/>
+    <line x1="60" y1="360" x2="680" y2="360" stroke="var(--border-strong)" stroke-width="1"/>
+    <line id="vLine" x1="60" y1="20" x2="60" y2="360" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
+    <line id="hLine" x1="60" y1="360" x2="680" y2="360" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4 3"/>
 
-      <!-- Çeyrek Başlıkları (Noktaların her zaman üstünde kalması için alta eklendi ve konumları dışa kaydırıldı) -->
-      <!-- Üst Başlıklar (y koordinatları 35'ten 15'e çekilerek grafik dışına taşındı) -->
-      <rect x="130" y="2" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
-      <text x="215" y="16" text-anchor="middle" font-size="12" font-weight="800" fill="var(--text-warning)">Değerli ama aktif</text>
-      
-      <rect x="440" y="2" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
-      <text x="525" y="16" text-anchor="middle" font-size="12" font-weight="800" fill="var(--text-danger)">Kritik kayıp riski</text>
-      
-      <!-- Alt Başlıklar (Grafik çizgisinin güvenle altına alındı) -->
-      <rect x="130" y="365" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
-      <text x="215" y="380" text-anchor="middle" font-size="12" font-weight="800" fill="var(--text-success)">Sağlıklı müşteri</text>
-      
-      <rect x="440" y="365" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
-      <text x="525" y="380" text-anchor="middle" font-size="12" font-weight="800" fill="var(--text-secondary)">Doğal kayıp</text>
-      
-      <!-- Eksen Etiketleri -->
-      <text x="370" y="415" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)">Son etkileşimden bu yana geçen gün</text>
-      <text x="20" y="190" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)" transform="rotate(-90 20 190)">Yaşam boyu değer (₺)</text>
-    </svg>
-  </div>
+    <!-- Grafik Veri Noktaları -->
+    <g id="points"></g>
+
+    <!-- Üst Sol -->
+    <rect x="130" y="2" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
+    <text
+      x="215"
+      y="16"
+      text-anchor="middle"
+      font-size="12"
+      font-weight="700"
+      fill="var(--text-warning)">
+      Değerli ama aktif
+    </text>
+
+    <!-- Üst Sağ -->
+    <rect x="440" y="2" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
+    <text
+      x="525"
+      y="16"
+      text-anchor="middle"
+      font-size="12"
+      font-weight="700"
+      fill="var(--text-danger)">
+      Kritik kayıp riski
+    </text>
+
+    <!-- Alt Sol -->
+    <rect x="130" y="365" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
+    <text
+      x="215"
+      y="380"
+      text-anchor="middle"
+      font-size="12"
+      font-weight="700"
+      fill="var(--text-success)">
+      Sağlıklı müşteri
+    </text>
+
+    <!-- Alt Sağ -->
+    <rect x="440" y="365" width="170" height="20" fill="var(--page-bg)" rx="4" opacity="0.9"/>
+    <text
+      x="525"
+      y="380"
+      text-anchor="middle"
+      font-size="12"
+      font-weight="700"
+      fill="var(--text-secondary)">
+      Doğal kayıp
+    </text>
+
+    <!-- Eksen Etiketleri -->
+    <text x="370" y="415" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)">
+      Son etkileşimden bu yana geçen gün
+    </text>
+
+    <text x="20" y="190" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-secondary)" transform="rotate(-90 20 190)">
+      Yaşam boyu değer (₺)
+    </text>
+
+  </svg>
+</div>
 
   <p class="footer-text">dataSpecta BI · Mockup taslağı — örnek veri ile üretilmiştir</p>
 
