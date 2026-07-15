@@ -23,82 +23,108 @@
 
   *{ box-sizing:border-box; }
 
+  /* Sayfayı tam ekran yüksekliğine sabitledik ve dışarı taşmayı engelledik */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
   body{
-    margin:0;
     background:var(--page-bg);
     color:var(--text-primary);
     font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding:2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
+  /* Ana kapsayıcı dikeyde esnek (flex) yapıldı ve ekrana sığdırıldı */
   .wrap{
-    max-width:900px;
-    margin:0 auto;
+    width: 100%;
+    max-width: 900px;
+    height: 100vh;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .header-row{
     position:relative;
-    margin-bottom:4px;
+    margin-bottom: 2px;
+    flex-shrink: 0;
   }
 
   .logo{
     position:absolute;
     top:0;
     right:0;
-    height:32px;
+    height:28px;
     width:auto;
   }
 
   h1{
-    font-size:20px;
+    font-size:18px;
     font-weight:700;
-    margin:0 0 4px;
+    margin:0;
     text-align:center;
   }
 
-  .subtitle{
-    font-size:13px;
-    color:var(--text-secondary);
-    margin:0 0 1.5rem;
-    max-width:640px;
-    line-height:1.5;
+  /* Slider alanları dikey alanı daraltmak için küçültüldü */
+  .filter-row {
+    display:flex; 
+    gap:16px; 
+    flex-wrap:wrap; 
+    margin-top:12px; 
+    margin-bottom:12px;
+    flex-shrink: 0;
+  }
+
+  .kpi-container {
+    display:grid; 
+    grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); 
+    gap:10px; 
+    margin-bottom:12px;
+    flex-shrink: 0;
   }
 
   .kpi-card{
     position:relative;
     border-radius:var(--radius);
-    padding:1rem;
-    padding-right:2.6rem;
+    padding:0.75rem;
+    padding-right:2.2rem;
   }
 
   .kpi-amount{
-    font-size:13px;
-    margin:4px 0 0;
+    font-size:11px;
+    margin:2px 0 0;
   }
 
   .kpi-trend{
-    font-size:12px;
-    margin:6px 0 0;
+    font-size:10px;
+    margin:4px 0 0;
     display:flex;
     align-items:center;
     gap:4px;
   }
 
   .kpi-action{
-    font-size:12px;
+    font-size:11px;
     font-weight:700;
-    margin:8px 0 0;
-    padding-top:8px;
+    margin:4px 0 0;
+    padding-top:4px;
     border-top:1px solid rgba(0,0,0,0.08);
   }
 
   .detail-btn{
     position:absolute;
-    top:10px;
-    right:10px;
-    width:24px;
-    height:24px;
-    border-radius:6px;
+    top:8px;
+    right:8px;
+    width:20px;
+    height:20px;
+    border-radius:4px;
     border:none;
     background:rgba(255,255,255,0.6);
     display:flex;
@@ -111,8 +137,32 @@
     background:rgba(255,255,255,0.95);
   }
   .detail-btn svg{
-    width:14px;
-    height:14px;
+    width:12px;
+    height:12px;
+  }
+
+  /* Grafiğin ekran yüksekliğine göre esnemesini sağlayan yeni container */
+  .chart-container {
+    flex: 1;
+    min-height: 0; /* Flexbox dikey taşma bug'ını önler */
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #plot {
+    max-height: 100%;
+    max-width: 100%;
+    display: block;
+  }
+
+  .footer-text {
+    font-size:10px; 
+    color:var(--text-muted); 
+    margin-top:8px;
+    flex-shrink: 0;
   }
 </style>
 </head>
@@ -120,42 +170,42 @@
 <div class="wrap">
 
   <div class="header-row">
-    <img src="data:image/png;base64,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" alt="dataSpecta" class="logo" />
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAasCA_BANNED_BASE64_FOR_BREVITY" alt="dataSpecta" class="logo" />
     <h1>Kayıp Risk Haritası</h1>
   </div>
 
-<div style="display:flex; gap:24px; flex-wrap:wrap; margin-top:32px; margin-bottom:1.25rem;"> 
-  <div style="flex:1; min-width:220px;">
-      <label style="font-size:13px; color:var(--text-secondary); display:flex; justify-content:space-between; align-items:center;">
+  <div class="filter-row">  
+    <div style="flex:1; min-width:200px;">
+      <label style="font-size:12px; color:var(--text-secondary); display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
         <span>Son etkileşimden bu yana geçen gün eşiği</span>
-        <span style="display:flex; align-items:center; gap:6px;">
+        <span style="display:flex; align-items:center; gap:4px;">
           <input type="number" id="dayInput" value="180" min="0" max="365" step="5"
-            style="width:64px; font-weight:700; text-align:right; border:1px solid var(--border-strong); border-radius:6px; padding:3px 6px; font-size:13px; color:var(--text-primary); font-family:inherit;" />
+            style="width:54px; font-weight:700; text-align:right; border:1px solid var(--border-strong); border-radius:6px; padding:2px 4px; font-size:11px; color:var(--text-primary); font-family:inherit;" />
           <span style="font-weight:700; color:var(--text-primary);">gün</span>
         </span>
       </label>
-      <input type="range" id="daySlider" min="0" max="365" step="5" value="180" style="width:100%;" />
+      <input type="range" id="daySlider" min="0" max="365" step="5" value="180" style="width:100%; margin: 0;" />
     </div>
-    <div style="flex:1; min-width:220px;">
-      <label style="font-size:13px; color:var(--text-secondary); display:flex; justify-content:space-between; align-items:center;">
+    <div style="flex:1; min-width:200px;">
+      <label style="font-size:12px; color:var(--text-secondary); display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
         <span>Yaşam boyu değer (CLV) eşiği</span>
-        <span style="display:flex; align-items:center; gap:6px;">
+        <span style="display:flex; align-items:center; gap:4px;">
           <input type="number" id="clvInput" value="350000" min="0" max="750000" step="10000"
-            style="width:90px; font-weight:700; text-align:right; border:1px solid var(--border-strong); border-radius:6px; padding:3px 6px; font-size:13px; color:var(--text-primary); font-family:inherit;" />
+            style="width:80px; font-weight:700; text-align:right; border:1px solid var(--border-strong); border-radius:6px; padding:2px 4px; font-size:11px; color:var(--text-primary); font-family:inherit;" />
           <span style="font-weight:700; color:var(--text-primary);">₺</span>
         </span>
       </label>
-      <input type="range" id="clvSlider" min="0" max="750000" step="10000" value="350000" style="width:100%;" />
+      <input type="range" id="clvSlider" min="0" max="750000" step="10000" value="350000" style="width:100%; margin: 0;" />
     </div>
   </div>
 
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:1.5rem;">
+  <div class="kpi-container">
     <div class="kpi-card" style="background:var(--bg-danger);">
       <button class="detail-btn" onclick="openDetail('crit','Kritik kayıp riski')" title="Müşteri listesini gör">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </button>
-      <p style="font-size:13px; font-weight:700; margin:0 0 4px; color:var(--text-danger);">Kritik kayıp riski</p>
-      <p style="font-size:24px; font-weight:500; margin:0; color:var(--text-danger);" id="critCount">-</p>
+      <p style="font-size:12px; font-weight:700; margin:0 0 2px; color:var(--text-danger);">Kritik kayıp riski</p>
+      <p style="font-size:20px; font-weight:500; margin:0; color:var(--text-danger);" id="critCount">-</p>
       <p class="kpi-amount" style="color:var(--text-danger);" id="critShare">-</p>
       <p class="kpi-trend" style="color:var(--text-danger);" id="critTrend">-</p>
       <p class="kpi-action" style="color:var(--text-danger);" id="critAction">-</p>
@@ -164,8 +214,8 @@
       <button class="detail-btn" onclick="openDetail('watch','Değerli ama aktif')" title="Müşteri listesini gör">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </button>
-      <p style="font-size:13px; font-weight:700; margin:0 0 4px; color:var(--text-warning);">Değerli ama aktif</p>
-      <p style="font-size:24px; font-weight:500; margin:0; color:var(--text-warning);" id="watchCount">-</p>
+      <p style="font-size:12px; font-weight:700; margin:0 0 2px; color:var(--text-warning);">Değerli ama aktif</p>
+      <p style="font-size:20px; font-weight:500; margin:0; color:var(--text-warning);" id="watchCount">-</p>
       <p class="kpi-amount" style="color:var(--text-warning);" id="watchShare">-</p>
       <p class="kpi-trend" style="color:var(--text-warning);" id="watchTrend">-</p>
     </div>
@@ -173,8 +223,8 @@
       <button class="detail-btn" onclick="openDetail('dormant','Doğal kayıp')" title="Müşteri listesini gör">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </button>
-      <p style="font-size:13px; font-weight:700; margin:0 0 4px; color:var(--text-secondary);">Doğal kayıp</p>
-      <p style="font-size:24px; font-weight:500; margin:0;" id="dormantCount">-</p>
+      <p style="font-size:12px; font-weight:700; margin:0 0 2px; color:var(--text-secondary);">Doğal kayıp</p>
+      <p style="font-size:20px; font-weight:500; margin:0;" id="dormantCount">-</p>
       <p class="kpi-amount" style="color:var(--text-secondary);" id="dormantShare">-</p>
       <p class="kpi-trend" style="color:var(--text-secondary);" id="dormantTrend">-</p>
     </div>
@@ -182,15 +232,16 @@
       <button class="detail-btn" onclick="openDetail('healthy','Sağlıklı müşteri')" title="Müşteri listesini gör">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </button>
-      <p style="font-size:13px; font-weight:700; margin:0 0 4px; color:var(--text-success);">Sağlıklı müşteri</p>
-      <p style="font-size:24px; font-weight:500; margin:0; color:var(--text-success);" id="healthyCount">-</p>
+      <p style="font-size:12px; font-weight:700; margin:0 0 2px; color:var(--text-success);">Sağlıklı müşteri</p>
+      <p style="font-size:20px; font-weight:500; margin:0; color:var(--text-success);" id="healthyCount">-</p>
       <p class="kpi-amount" style="color:var(--text-success);" id="healthyShare">-</p>
       <p class="kpi-trend" style="color:var(--text-success);" id="healthyTrend">-</p>
     </div>
   </div>
 
-  <div style="position:relative; width:100%;">
-    <svg id="plot" viewBox="0 0 700 430" width="100%" style="display:block; overflow:visible;">
+  <!-- Grafik buradaki esnek kapsayıcı içinde dikey alana göre kendini boyutlandırıyor -->
+  <div class="chart-container">
+    <svg id="plot" viewBox="0 0 700 430" style="overflow:visible;">
       <text x="215" y="35" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-warning)">Değerli ama aktif</text>
       <text x="525" y="35" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text-danger)">Kritik kayıp riski</text>
       <line x1="60" y1="20" x2="60" y2="360" stroke="var(--border-strong)" stroke-width="1"/>
@@ -205,11 +256,12 @@
     </svg>
   </div>
 
-  <p style="font-size:11px; color:var(--text-muted); margin-top:1.5rem;">dataSpecta BI · Mockup taslağı — örnek veri ile üretilmiştir</p>
+  <p class="footer-text">dataSpecta BI · Mockup taslağı — örnek veri ile üretilmiştir</p>
 
 </div>
 
 <script>
+/* Mevcut JS mantığın tamamen korunmuştur. Sadece Logo Base64'ünü kendi kodundakiyle değiştirmen yeterli. */
 (function(){
   var W = 700, H = 420, padL = 60, padB = 60, padT = 20, padR = 20;
   var xMax = 365, yMax = 750000;
@@ -218,7 +270,6 @@
   function xPix(v){ return padL + (v/xMax)*plotW; }
   function yPix(v){ return (H - padB) - (v/yMax)*plotH; }
 
-  // ---- isim / iletişim üretimi (örnek veri) ----
   var firstNames = ["Ahmet","Mehmet","Ayşe","Fatma","Mustafa","Emine","Ali","Hatice","Hüseyin","Zeynep","İbrahim","Elif","Hasan","Meryem","İsmail","Özlem","Murat","Sevgi","Kemal","Derya","Burak","Gül","Serkan","Aylin","Volkan","Ebru","Onur","Pınar","Cem","Nazlı"];
   var lastNames = ["Yılmaz","Kaya","Demir","Şahin","Çelik","Yıldız","Yıldırım","Öztürk","Aydın","Özdemir","Arslan","Doğan","Kılıç","Aslan","Çetin","Kara","Koç","Kurt","Özkan","Şimşek"];
   var branches = ["İstanbul","Ankara","İzmir","Bursa","Antalya","Adana","Konya","Gaziantep","Kayseri","Mersin"];
@@ -250,7 +301,6 @@
     var clv = Math.min(yMax, base * (0.6 + Math.random()*0.6));
     var size = 3 + Math.random()*5;
 
-    // geçen dönem (yaklaşık 30 gün önceki) durum simülasyonu
     var prevDay = clamp(day - (20 + Math.random()*20), 0, xMax);
     var prevClv = clv * (0.88 + Math.random()*0.14);
 
